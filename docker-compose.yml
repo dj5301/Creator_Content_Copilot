@@ -1,0 +1,19 @@
+services:
+  creator-copilot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: creator-copilot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NEXT_TELEMETRY_DISABLED: "1"
+      LANDING_PAGE_URL: ${LANDING_PAGE_URL:-http://localhost:3000}
+      STREAMLIT_PORT: ${STREAMLIT_PORT:-8501}
+      STREAMLIT_SERVER_ADDRESS: ${STREAMLIT_SERVER_ADDRESS:-0.0.0.0}
+      STREAMLIT_PUBLIC_URL: ${STREAMLIT_PUBLIC_URL:-http://localhost:8501}
+      STREAMLIT_MANAGED_EXTERNALLY: ${STREAMLIT_MANAGED_EXTERNALLY:-false}
+    ports:
+      - "3000:3000"
+      - "8501:8501"
