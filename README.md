@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Creator Copilot
 
 Creator Copilot is a dual-interface AI content assistant:
@@ -273,6 +272,3 @@ STREAMLIT_PUBLIC_URL=https://your-streamlit-domain
 3. Test `docker compose up --build` locally.
 4. Deploy the Docker version to EC2 first.
 5. Add a reverse proxy and HTTPS before sharing publicly.
-=======
-# Creator_Content_Copilot
->>>>>>> 3909bf2250bc8bd81646e79462e349824c0eaf6a
