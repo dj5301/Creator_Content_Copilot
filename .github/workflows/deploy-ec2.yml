@@ -11,33 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Copy project to EC2
-        uses: appleboy/scp-action@v0.1.7
+      - name: Deploy on EC2 over SSH
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          port: ${{ secrets.EC2_PORT || 22 }}
-          source: "."
-          target: ${{ secrets.EC2_DEPLOY_PATH }}
-          overwrite: true
-          rm: false
-          strip_components: 0
-          exclude: ".git,node_modules,.next,venv,.venv,.DS_Store,.env"
-
-      - name: Rebuild and restart on EC2
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          port: ${{ secrets.EC2_PORT || 22 }}
+          port: ${{ secrets.EC2_PORT }}
+          command_timeout: 30m
           script: |
-            cd "${{ secrets.EC2_DEPLOY_PATH }}"
-            test -f .env || (echo "Missing .env on the EC2 host" && exit 1)
-            sudo docker compose down || true
+            set -e
+            cd ${{ secrets.EC2_DEPLOY_PATH }}
+            git checkout main
+            git pull --ff-only origin main
             sudo docker compose up --build -d
             sudo docker image prune -f
